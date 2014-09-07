@@ -1,8 +1,13 @@
-.associated_files {
-}
-
 #recording_header {
   size:20px;
+}
+
+.filter_options {
+    display:None;
+}
+
+.start_filter {
+    display:None;
 }
 
 body {
@@ -14,5 +19,12 @@ td.song_count {
 }
 td.song_title{
   height:20px;
+}
+.table-file-hidden {
+    display:None;
+}
+
+.tr-concert-hidden {
+    display:None;
 }
 

@@ -19,6 +19,7 @@ from live_rage.models.Recording import (Recording,
                                         VIDEO_TYPES)
 import json
 import logging
+import markdown
 
 log = logging.getLogger(__name__)
 
@@ -66,7 +67,8 @@ def logout_view(request):
     return HTTPFound(location=loc, headers=headers)
 
 
-@view_config(route_name='artist_concert_list', renderer='concert_list.jinja2')
+@view_config(route_name='artist_concert_list',
+             renderer='basic/concert_list.jinja2')
 def artist_concert_list(request):
     """ Gets all concerts associated with a given artist.
     """
@@ -87,7 +89,8 @@ def artist_concert_list(request):
         a_types=AUDIO_TYPES)
 
 
-@view_config(route_name='concert_list', renderer='concert_list.jinja2')
+@view_config(route_name='concert_list', 
+             renderer='basic/concert_list.jinja2')
 def concert_list(request):
     """ Displays all available concerts to the user.
     """
@@ -135,7 +138,8 @@ def filter_concert_list(request):
             'action': 'success'}
 
 
-@view_config(route_name='concert_view', renderer='concert_view.jinja2')
+@view_config(route_name='concert_view',
+             renderer='basic/concert_view.jinja2')
 def concert_view(request):
     """ This fetches the appropriate information associated with
     a single concert and displays it to the user.
@@ -184,7 +188,8 @@ def get_filtered_recordings(request):
     pass
 
 
-@view_config(route_name='render_recording', renderer='recording_view.jinja2')
+@view_config(route_name='render_recording',
+             renderer='basic/recording_view.jinja2')
 def render_recording(request):
     """ Displays information for an available recording.
     """
@@ -229,7 +234,7 @@ def send_file(request):
     raise HTTPNotFound
 
 
-@view_config(route_name="artist_song", renderer="song.jinja2")
+@view_config(route_name="artist_song", renderer="basic/song.jinja2")
 def artist_song(request):
     """ Displays a song associated with an artist
     """
@@ -240,14 +245,15 @@ def artist_song(request):
 
     if artist.song['song_id'] == '':
         raise HTTPNotFound
-
+    
+    artist.song['lyrics'] = markdown.markdown(artist.song['lyrics'], extensions=['nl2br'])
     return dict(
         artist=artist.artist,
         song=artist.song,
         concerts=artist.song_at_concerts)
 
 
-@view_config(route_name="artist_song_list", renderer="song_list.jinja2")
+@view_config(route_name="artist_song_list", renderer="basic/song_list.jinja2")
 def artist_song_list(request):
     """ Displays ALL Songs associated with a count.
     """
@@ -269,7 +275,7 @@ def artist_song_list(request):
         max_count=max_count)
 
 
-@view_config(route_name="artist_info", renderer="artist_info.jinja2")
+@view_config(route_name="artist_info", renderer="basic/artist_info.jinja2")
 def artist_info(request):
     """ Displays information associated with an artist.
     """

@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 import json
 import datetime
 
-VIDEO_TYPES = ['AVI', 'MP4', 'DVD', 'MOD',
+VIDEO_TYPES = ['AVI', 'MP4', 'DVD', 'MOD', 'MPG',
                'HD', 'FLV', 'VIDEO-OTHER',
                'X264', 'XVID', 'VOB', 'MTS',
                'MKV']

@@ -1,0 +1,50 @@
+{% extends "basic/base.jinja2" %}
+{% block title %} {{ artist }} - {{song['title']}}{% endblock %}
+{% block body %}
+<div id="song-info" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ song['title'] }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl id="play-stats" class="dl-horizontal">
+                {% if 'first-played' in song %}
+                <dt>First Played:</dt>
+                <dd>{{ song['first-played'].strftime('%Y/%m/%d')}}</dd>
+                <dt>Last Played:</dt>
+                <dd>{{ song['last-played'].strftime('%Y/%m/%d')}}</dd>
+                {% endif %}
+                <dt>Total Times Played:</dt>
+                <dd>{{ song['count'] }} </dd>
+            </dl>
+            <div id="latest_concerts">
+                <table id="latest_concerts_table" class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td rowspan="2">Last Performed At:</td>
+                        <tr>
+                    </thead>
+                    <tbody id="latest_concerts_table_content">
+                    {% for concert in concerts %}
+                    <tr>
+                      <td>{{concert['date']}}</td>
+                      <td><a href="{{request.route_url('concert_view', concert_id=concert['concert_id'])}}">{{ concert['venue'] }}</a></td>
+                    </tr>
+                   {% endfor %}
+                   </tbody>
+                </table>
+            </div>
+        </div> 
+
+        <div id="lyrics-text" class="col-md-6">
+            {{ song['lyrics']|safe }}
+        </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
