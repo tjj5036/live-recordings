@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends "basic/base.jinja2" %}
+{% block title %} About {% endblock %}
+{% block body %}
+<div id="about-container" class="container">
+    <div="row">
+        <div class="col-md-12">
+            <h1> About </h1>
+            <p>
+                The purpose of this site is to host live recordings of Rage Against the Machine and some of the projects of its bandmembers.
+                These are all recordings of independent origin, meaning that they have not been officially released.
+                If you believe that a recording on here violates the spirit of a ROIO, please drop me a line at {{contact_email | e }}.
+            </p>
+            <p>
+                There is a lot more content coming in the meantime, stay put!
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

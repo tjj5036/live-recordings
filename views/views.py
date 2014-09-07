@@ -33,14 +33,14 @@ def forbidden_view(request):
     return HTTPFound(location=loc)
 
 
-@view_config(context=HTTPNotFound, renderer="404.mako")
+@view_config(context=HTTPNotFound, renderer="404.jinja2")
 def not_found(self, request):
     """ Handles all 404 instances
     """
     return dict()
 
 
-@view_config(route_name='login', renderer='login.mako')
+@view_config(route_name='login', renderer='login.jinja2')
 def login_view(request):
     """ Logs a user in, redirect them to admin main.
     """
@@ -66,7 +66,7 @@ def logout_view(request):
     return HTTPFound(location=loc, headers=headers)
 
 
-@view_config(route_name='artist_concert_list', renderer='concert_list.mako')
+@view_config(route_name='artist_concert_list', renderer='concert_list.jinja2')
 def artist_concert_list(request):
     """ Gets all concerts associated with a given artist.
     """
@@ -87,7 +87,7 @@ def artist_concert_list(request):
         a_types=AUDIO_TYPES)
 
 
-@view_config(route_name='concert_list', renderer='concert_list.mako')
+@view_config(route_name='concert_list', renderer='concert_list.jinja2')
 def concert_list(request):
     """ Displays all available concerts to the user.
     """
@@ -135,7 +135,7 @@ def filter_concert_list(request):
             'action': 'success'}
 
 
-@view_config(route_name='concert_view', renderer='concert_view.mako')
+@view_config(route_name='concert_view', renderer='concert_view.jinja2')
 def concert_view(request):
     """ This fetches the appropriate information associated with
     a single concert and displays it to the user.
@@ -157,19 +157,21 @@ def concert_view(request):
         recordings=concert.get_recordings(request))
 
 
-@view_config(route_name='about', renderer='about.mako')
+@view_config(route_name='about', renderer='basic/about.jinja2')
 def about(request):
     """ Simply returns the about page
     """
     return dict(
-        # TODO: Add something to return (message maybe? news?)
+        contact_email=str(request.registry.settings['contact_email'])
     )
 
 
-@view_config(route_name='recording_list', renderer='recording_list.mako')
+@view_config(route_name='recording_list',
+             renderer='basic/recording_list.jinja2')
 def recording_list(request):
     """ Gets a list of recordings that are visible.
     """
+    log.info("[event=recording_list][display=all]")
     fields = {'desc': 1, 'primary': 1, 'recording_url_id': 1}
     recording_criteria = {'visible': 'True', 'deleted': 'False'}
     return dict(
@@ -182,7 +184,7 @@ def get_filtered_recordings(request):
     pass
 
 
-@view_config(route_name='render_recording', renderer='recording_view.mako')
+@view_config(route_name='render_recording', renderer='recording_view.jinja2')
 def render_recording(request):
     """ Displays information for an available recording.
     """
@@ -227,7 +229,7 @@ def send_file(request):
     raise HTTPNotFound
 
 
-@view_config(route_name="artist_song", renderer="song.mako")
+@view_config(route_name="artist_song", renderer="song.jinja2")
 def artist_song(request):
     """ Displays a song associated with an artist
     """
@@ -245,7 +247,7 @@ def artist_song(request):
         concerts=artist.song_at_concerts)
 
 
-@view_config(route_name="artist_song_list", renderer="song_list.mako")
+@view_config(route_name="artist_song_list", renderer="song_list.jinja2")
 def artist_song_list(request):
     """ Displays ALL Songs associated with a count.
     """
@@ -267,7 +269,7 @@ def artist_song_list(request):
         max_count=max_count)
 
 
-@view_config(route_name="artist_info", renderer="artist_info.mako")
+@view_config(route_name="artist_info", renderer="artist_info.jinja2")
 def artist_info(request):
     """ Displays information associated with an artist.
     """
@@ -297,11 +299,12 @@ def artist_info(request):
         max_count=max_count)
 
 
-@view_config(route_name="main", renderer="artists.mako")
-@view_config(route_name="artist_list", renderer="artists.mako")
+@view_config(route_name="main", renderer="basic/artists.jinja2")
+@view_config(route_name="artist_list", renderer="basic/artists.jinja2")
 def view_artists(request):
     """ Displays all artists.
     """
+    log.info("[event=main][artist_display=all]")
     artists = Artist_Filter()
     artists.get_artists_only(request, {'name': 1, 'url-name': 1})
     return dict(artists=artists.artists)

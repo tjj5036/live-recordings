@@ -1,0 +1,26 @@
+{% extends "basic/base.jinja2" %}
+{% block title %} Live Rage {% endblock %}
+{% block body %}
+<div id="artist-container" class="container">
+    <div="row">
+        <div class="col-md-12">
+            <table id="artist_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>Artist</td>
+                        <td>Number of Shows</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for artist_url, artist_info in artists.iteritems() %}
+                    <tr>
+                        <td>{{ artist_info['name'] }}</td>
+                        <td><a href="{{ request.route_url('artist_info', artist_id=artist_url)}}">{{ artist_info['show_count']}}</a></td>  
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div> 
+    </div> 
+</div> 
+{% endblock %}

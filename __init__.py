@@ -29,6 +29,7 @@ def main(global_settings, **settings):
         session_factory=session_factory)
     
     # Include Views
+    config.include('pyramid_jinja2')
     config.include('.views')
 
     # MongoDB
