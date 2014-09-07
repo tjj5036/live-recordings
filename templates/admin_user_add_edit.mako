@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <title>Add / Edit Users </title>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+  <meta name="keywords" content="python web application" />
+  <meta name="description" content="Management" />
+  <link href="${request.static_url('live_rage:static/bootstrap.css')}" rel="stylesheet">
+  <link href="${request.static_url('live_rage:static/admin.css')}" media="screen" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <%include file="admin_header.mako"/>
+    <div id="add_user_container" class="container">
+      <div class="row">
+        <form id='add_user_form' role="form" action=#>
+
+          <div class="col-xs-12">
+            <button type="submit" value="Submit" id="add_button" class="btn">Create New User</button>
+          </div>
+          <div class="col-xs-12">
+            <label class="error" id="name_error">You need to input a name!</label><br>
+            <label class="error" id="password_error">You need to input a password!</label><br>
+            <label class="error" id="permission_error">You need assign at least one permission!</label><br>
+          </div>  
+
+          <div class="col-xs-12">
+
+            <div class="form-group">
+              <label for='password'>Username:</label>
+              <div class="input-group-sm">
+                <input class="form-control" type="text" id="username" placeholder="Username">
+              </div>  
+            </div>  
+
+            <div class="form-group">
+              <label for='username'>Password:</label>
+              <div class="input-group-sm">
+                <input class="form-control" type="password" id="password" placeholder="Password">
+              </div>  
+            </div>  
+
+          </div>  <!-- username and password -->
+
+          <div class="col-xs-6" id='permission-container'>
+            <div id="permission_options" class="form-group">
+              <select class="form-control" id="permissions" multiple='multiple' name='permissions[]' size='5'>
+                <option value="admin">Super Administrators</option>
+                <option value="file">File Managers</option>
+                <option value="setlist">Setlist Managers</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-xs-6" id='permission-container'>
+            <div class="form-group">
+              <label for='permission_table'>Permissions</label>
+              <table id="permission_table" class="table">
+                <tbody id="sortable">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </form>
+      </div> <!-- col -->
+    </div> <!-- container -->
+
+    <%include file="jquery.html"/>
+  <script>
+
+  $('.error').hide();  
+
+  /* Adds a show to the setlist array */
+  $("#permissions").dblclick(function () {
+    $("select option:selected").each(function () {
+      $("#sortable").append(
+        '<tr ondblclick="delete_row(this)">' +
+        '<td>' + $(this).val() + '</td></tr>'
+      )
+      $("#sortable").sortable("refresh");
+    });
+  });   
+
+  /* Removes a song from the setlist */
+  function delete_row(xrow) {
+    $(xrow).closest("tr").remove();
+    $("#sortable").sortable("refresh");
+  }
+
+  /* Allows for sorting of setlists */
+  $(function() {
+    $("#sortable").sortable({
+      stop: function(evt, ui) {
+        reorder();
+      }
+    });
+  });
+
+  $(document).ready(function(){
+    $("#add_button").click(function(){
+      $('.error').hide();  
+      event.preventDefault();
+
+      if ($("#username").val() == '') {
+        $("label#name_error").show();
+        $("#name_error").focus();
+        return false;
+      }
+      if ($("#password").val() == '') {
+        $("label#password_error").show();
+        $("#password_error").focus();
+        return false;
+      }
+
+      var permissions = new Array();
+      count = parseInt(0, 10)
+      $("#sortable tr").each(function(){
+        permissions[count] = $(this).find("td:first").text();
+        count = count + 1
+      });
+      if (permissions.length == 0) {
+        $("label#permission_error").show();
+        $("#permission_error").focus();
+        return false;
+      }  
+      $.ajax({
+        type:"POST",
+        url: "${request.route_url('admin_add_user')}",
+        data:{ 
+          username : $('#username').val(),
+          password : $('#password').val(),
+          permissions : permissions,
+        },
+        success:function(result){
+          $('.error').hide();  
+          if (result.action == 'success') {
+            alert("User added successfully!");
+            $('#new_name').val('');
+            $('#new_password').val('');
+            return true;
+          }
+          return false;
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>
+
+

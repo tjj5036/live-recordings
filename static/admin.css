@@ -1,0 +1,20 @@
+#concert_table {
+  width:500px;
+}
+
+#concerts {
+  width:400px;
+}
+
+body {
+  padding-top:50px;
+}
+
+#setlist_options {
+  width:400px;
+}
+
+.pfile_error {
+  width:100px;
+  color:red;
+}

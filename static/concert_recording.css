@@ -1,0 +1,18 @@
+.associated_files {
+}
+
+#recording_header {
+  size:20px;
+}
+
+body {
+  padding-top:50px;
+}
+
+td.song_count {
+  height:20px;
+}
+td.song_title{
+  height:20px;
+}
+

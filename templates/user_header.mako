@@ -1,0 +1,21 @@
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="${request.route_url('concert_list')}">Rage Live</a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="${request.route_url('concert_list')}">Concerts</a></li>
+        <li><a href="${request.route_url('recording_list')}">Recordings</a></li>
+        <li><a href="${request.route_url('artist_list')}">Artists</a></li>
+        <li><a href="${request.route_url('about')}">About</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
