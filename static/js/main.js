@@ -65,7 +65,10 @@
         });
 
         $('tr').click(function() {
-            window.location.href = $(this).find('a').attr('href');
+            var dest = $(this).find('a').attr('href');
+            if (dest) {
+                window.location.href = $(this).find('a').attr('href');
+            }
         });
 
     };

@@ -20,7 +20,7 @@
                         <th>Primary Media Type</th>
                     </tr>
                     </thead>
-                    <tbody id="$recording_table_content">
+                    <tbody id="recording_table_content">
                     {% for recording in recording_list %}
                     <tr>
                         <td><a href="{{request.route_url('render_recording', recording_id=recording['recording_url_id'])}}">{{recording['desc']}}</a></td>

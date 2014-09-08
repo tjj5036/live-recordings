@@ -7,7 +7,7 @@
             <span class="btn btn-primary" id='show_filters'>Show Filters</span>
             <div id="concert_filter" class="col-md-12 start_filter">
                 <div class="checkbox">
-                    <label for="has_files">Has Recordings</label>
+                    <label for="has_files">Only Show Shows with Recordings</label>
                     <input id="has_files" type="checkbox">
                 </div>  
             </div>  
@@ -16,7 +16,7 @@
                 <label>Video Types: </label>
                 <div>
                     {% for v_type in v_types %}
-                    <input type="checkbox" class="v_types" name="v_types[]" value="{{v_type}}">{{v_type}}
+                    <input type="checkbox" class="v_types" name="v_types[]" value="{{v_type}}"><span class="v_type_value">{{v_type}}</span>
                     {% endfor %}
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <label>Audio Types: </label>
                 <div>
                     {% for a_type in a_types %}
-                    <input type="checkbox" class="a_types" name="a_types[]" value="{{a_type}}">{{a_type}}
+                    <input type="checkbox" class="a_types" name="a_types[]" value="{{a_type}}"><span class="a_type_value">{{a_type}}</span>
                     {% endfor %}
                 </div>
             </div>

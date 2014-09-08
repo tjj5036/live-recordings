@@ -75,6 +75,8 @@ def artist_concert_list(request):
     artist_normalized = request.db['artists'].find_one(
         {'url-name': request.matchdict['artist_id']},
         {'name': 1})
+    log.info("[event=get_artist_concerts][artist=%s]",
+             request.matchdict['artist_id'])
 
     concert_list = List_Filter(
         request,
@@ -100,6 +102,7 @@ def concert_list(request):
         {'artist': 1, 'date': 1, 'venue': 1, '_id': 1, 'concert_id': 1},
         True, False)
 
+    log.info("[event=get_artist_concerts][artist=all]")
     concert_list.build_file_list()
     return dict(
         concert_list=concert_list.concerts,
