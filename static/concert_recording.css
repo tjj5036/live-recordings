@@ -12,7 +12,11 @@
 }
 
 body {
-  padding-top:75px;
+  padding-top:100px;
+}
+
+.error {
+    display:None;
 }
 
 td.song_count {

@@ -53,9 +53,10 @@ def login_view(request):
         New_User = User(login, password, None)
         if New_User.authenticate(request):
             headers = remember(request, login)
+            log.info("[event=login][auth=succeeded][username=%s]", login)
             return HTTPFound(location=next, headers=headers)
+        log.info("[event=login][auth=failed][username=%s]", login)
         message = 'Failed login'
-
     return dict(message=message, next=next)
 
 

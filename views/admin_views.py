@@ -8,6 +8,9 @@ from live_rage.models.Artist import Artist, Artist_Filter
 from live_rage.models.Recording import Recording, Recording_Filter
 from live_rage.models.File import FileUpload
 from bson.objectid import ObjectId
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Root(object):
@@ -23,7 +26,7 @@ class Root(object):
         pass
 
 
-@view_config(route_name='admin_main', renderer='admin_main.mako',
+@view_config(route_name='admin_main', renderer='admin/admin_main.jinja2',
              permission='setlist')
 def admin_main(request):
     """ Administrator's home page
@@ -32,7 +35,8 @@ def admin_main(request):
 
 
 @view_config(route_name='admin_add_user', renderer='json')
-@view_config(route_name='admin_edit_user', renderer='admin_user_add_edit.mako',
+@view_config(route_name='admin_edit_user',
+             renderer='admin/admin_user_add_edit.jinja2',
              permission='admin')
 def admin_user_add(request):
     if request.method == 'POST':
@@ -55,7 +59,9 @@ def admin_suggest_setlist(request):
     """ Setlists suggestion.
     """
     if request.method == 'POST':
-        if 'artist_name' not in request.POST.keys():
+        artist_name = request.POST.get('artist_name', None)
+        if not artist_name:
+            log.info('[event=suggest_setlist][error=No artist]')
             return {'action': 'error'}
         artist = request.POST['artist_name']
         Song_Finder = Artist(artist, 'AUTOCOMPLETE', request)
@@ -67,10 +73,10 @@ def admin_suggest_setlist(request):
 
 @view_config(route_name='admin_add_show', renderer='json')
 @view_config(route_name='admin_add_new_show',
-             renderer='admin_show_add_edit.mako',
+             renderer='admin/admin_show_add_edit.jinja2',
              permission='setlist')
 @view_config(route_name='admin_edit_existing_show',
-             renderer='admin_show_add_edit.mako',
+             renderer='admin/admin_show_add_edit.jinja2',
              permission='setlist')
 def admin_show_add(request):
     """ Adds or edits a show.
@@ -96,7 +102,8 @@ def admin_show_add(request):
         action=action)
 
 
-@view_config(route_name='admin_song_list', renderer='admin_song_list.mako',
+@view_config(route_name='admin_song_list', 
+             renderer='admin/admin_song_list.jinja2',
              permission='setlist')
 def admin_song_list(request):
     """ Returns all songs that correspond to a given artist
@@ -123,10 +130,10 @@ def admin_delete_song(request):
 
 
 @view_config(route_name='admin_edit_song',
-             renderer='admin_song_add.mako',
+             renderer='admin/admin_song_add.jinja2',
              permission='setlist')
 @view_config(route_name='admin_edit_existing_song',
-             renderer='admin_song_add.mako',
+             renderer='admin/admin_song_add.jinja2',
              permission='setlist')
 @view_config(route_name='admin_add_song', renderer='json')
 def admin_add_edit_song(request):
@@ -159,10 +166,10 @@ def admin_add_edit_song(request):
 
 
 @view_config(route_name='admin_edit_recording',
-             renderer='admin_recording_add_edit.mako',
+             renderer='admin/admin_recording_add_edit.jinja2',
              permission='admin')
 @view_config(route_name='admin_edit_existing_recording',
-             renderer='admin_recording_add_edit.mako',
+             renderer='admin/admin_recording_add_edit.jinja2',
              permission='admin')
 @view_config(route_name='admin_add_recording', renderer='json')
 def admin_add_edit_recording(request):
@@ -262,7 +269,8 @@ def admin_delete_recording(request):
     return {'action': 'success'}
 
 
-@view_config(route_name='admin_list_show', renderer='admin_show_list.mako',
+@view_config(route_name='admin_list_show',
+             renderer='admin/admin_show_list.jinja2',
              permission="setlist")
 def admin_show_list(request):
     """ Gets a list of all (including deleted) shows.
@@ -276,7 +284,7 @@ def admin_show_list(request):
 
 
 @view_config(route_name='admin_list_recording',
-             renderer='admin_recording_list.mako',
+             renderer='admin/admin_recording_list.jinja2',
              permission='setlist')
 def admin_recording_list(request):
     """ Gets a list of all (including deleted) recordings.

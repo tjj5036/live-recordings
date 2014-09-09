@@ -1,6 +1,9 @@
 from bson.objectid import ObjectId
 from heapq import heappush, nlargest
 import uuid
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Artist_Filter(object):
@@ -56,6 +59,9 @@ class Artist(object):
         self.artist = artist
         self.song = {'title': '', 'song_id': '', 'lyrics': ''}
         if flag == 'AUTOCOMPLETE':
+            print self.artist
+            log.info('[event=artist_init][action=autocomplete]'
+                     '[artist=%s]', self.artist)
             self.songs = self.find_songs(request)
 
     def get_latest_concerts(self, criteria, fields,  limit, request):
@@ -64,6 +70,8 @@ class Artist(object):
         self.latest_concerts = []
         concerts = request.db['concerts'].find(
             criteria, fields).limit(limit).sort([('date',  -1)])
+        log.info('[event=get_latest_concerts][criteria=%s]'
+                 '[artist=%s]', str(criteria), str(self.artist))
         for concert in concerts:
             self.latest_concerts.append(concert)
 
@@ -74,11 +82,12 @@ class Artist(object):
             {'name': {'$regex': self.artist}})
         options = ''
         if artist is not None:
+            log.info('[event=find_songs][action=find_songs]'
+                     '[artist=%s]', str(self.artist))
             if 'songs' in artist.keys():
                 for song in artist['songs']:
                     options += ('<option value="%s">%s</option>' %
                                 (song['song_id'], song['title']))
-            self.artist = artist['name']
         return options
 
     def add_or_edit_song(self, request, song):
